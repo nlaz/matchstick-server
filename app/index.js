@@ -21,11 +21,6 @@ app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Set up handlebars templating engine for layout files.
-app.engine("html", handlebars({ defaultLayout: "layout", extname: ".html" }));
-app.set("views", "app/templates");
-app.set("view engine", "html");
-
 // Set up session middleware
 const options = { secret: config.secretKey, saveUninitialized: true, resave: true };
 app.use(session(options));
@@ -34,8 +29,10 @@ app.use(function(req, res, next) {
   next();
 });
 
-// Set up the routes for the static assets.
-app.use(express.static(paths.staticEntry));
+// Smoke route
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 routes.registerRoutes(app);
 routes.registerErrorHandlers(app);

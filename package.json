@@ -1,7 +1,7 @@
 {
-  "name": "mlh-hackathon-nodejs-starter",
+  "name": "matchstick-server",
   "version": "0.1.0",
-  "description": "A hackathon starting point for new Nodejs applications",
+  "description": "A backend for the matchstick application",
   "scripts": {
     "start": "nodemon app/index.js",
     "deploy": "NODE_ENV=production node app/index.js"
