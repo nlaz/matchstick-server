@@ -1,4 +1,3 @@
-const auth = require("./auth");
-const home = require("./home");
+const api = require("./api");
 
-module.exports = { auth, home };
+module.exports = { api };

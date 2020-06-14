@@ -1,6 +1,5 @@
 const express = require("express");
 const session = require("express-session");
-const handlebars = require("express-handlebars");
 const compression = require("compression");
 const logger = require("morgan");
 
@@ -22,9 +21,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 // Set up session middleware
-const options = { secret: config.secretKey, saveUninitialized: true, resave: true };
+const options = {
+  secret: config.secretKey,
+  saveUninitialized: true,
+  resave: true,
+};
 app.use(session(options));
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   res.locals.session = req.session;
   next();
 });
