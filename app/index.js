@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const compression = require("compression");
 const logger = require("morgan");
+const cors = require("cors");
 
 const config = require("../config");
 const paths = require("../config/paths");
@@ -12,6 +13,7 @@ const app = express();
 
 // Log requests to the console.
 app.use(logger("dev"));
+app.use(cors());
 
 // Will attempt to compress responses.
 app.use(compression());
