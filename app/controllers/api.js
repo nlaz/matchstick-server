@@ -1,8 +1,11 @@
 const express = require("express");
+const config = require("../../config");
 const capture = require("../utils/capture");
 const compare = require("../utils/compare");
 
 const router = express.Router();
+
+const addBaseURL = (filepath) => `${config.serverURL}/${filepath}`;
 
 router.get("/images", (req, res) => {
   res.json({ hello: "world" });
@@ -21,13 +24,12 @@ router.post("/images", async (req, res) => {
     const img2 = await capture(output);
     // Compare images
     const result = await compare(img1, img2);
-    console.log("compare", result);
 
     // Respond with image urls
     return res.json({
-      image1: img1,
-      image2: img2,
-      result: result,
+      image1: addBaseURL(img1),
+      image2: addBaseURL(img2),
+      result: addBaseURL(result),
     });
   } catch (error) {
     console.log(error);

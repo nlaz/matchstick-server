@@ -17,6 +17,7 @@ app.use(cors());
 
 // Will attempt to compress responses.
 app.use(compression());
+app.use("/images", express.static("images"));
 
 // Parse incoming requests data.
 app.use(express.json());
