@@ -12,7 +12,7 @@ router.get("/images", (req, res) => {
 });
 
 router.post("/images", async (req, res) => {
-  const { input, output } = req.query;
+  const { input, output, options } = req.body;
 
   if (!input || !output) {
     return res.status(400).send("Invalid request");
@@ -20,8 +20,8 @@ router.post("/images", async (req, res) => {
 
   try {
     // Capture websites
-    const img1 = await capture(input);
-    const img2 = await capture(output);
+    const img1 = await capture(input, options);
+    const img2 = await capture(output, options);
     // Compare images
     const result = await compare(img1, img2);
 

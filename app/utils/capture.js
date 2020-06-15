@@ -6,8 +6,8 @@ const removeHttp = require("./removeHttp");
 
 const defaults = {
   width: 1440,
-  overwrite: true,
   emulateDevice: "iPhone X",
+  overwrite: true,
 };
 
 const getCapture = async (url, options = {}) => {
