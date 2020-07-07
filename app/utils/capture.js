@@ -1,12 +1,11 @@
 const captureWebsite = require("capture-website");
 const parameterize = require("parameterize");
+const { devicesMap } = require("puppeteer/DeviceDescriptors");
 
 const prependHttp = require("./prependHttp");
 const removeHttp = require("./removeHttp");
 
 const defaults = {
-  width: 1440,
-  emulateDevice: "iPhone X",
   overwrite: true,
 };
 

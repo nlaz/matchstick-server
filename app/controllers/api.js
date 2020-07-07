@@ -13,9 +13,13 @@ router.get("/images", (req, res) => {
 
 router.post("/images", async (req, res) => {
   const { input, output, options } = req.body;
+  console.log("OPTIONS", options);
 
-  if (!input || !output) {
-    return res.status(400).send("Invalid request");
+  if (!input) {
+    return res.status(400).send("Missing website link!");
+  }
+  if (!output) {
+    return res.status(400).send("Missing mockup file!");
   }
 
   try {
@@ -33,6 +37,7 @@ router.post("/images", async (req, res) => {
     });
   } catch (error) {
     console.log(error);
+    return res.status(500).send("Something broke!");
   }
 });
 
