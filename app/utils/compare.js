@@ -25,13 +25,15 @@ const getCompare = async (img1, img2, options = {}) => {
     const opts = { ...defaults, ...options };
     const file1 = PNG.sync.read(fs.readFileSync(img1));
     const file2 = PNG.sync.read(fs.readFileSync(img2));
-    const data = await compareImages(file1, file2, options);
+
+    const data = await compareImages(file1, file1, options);
+
     const filename = Date.now() + "_" + "result";
     const filepath = `images/${filename}.png`;
     await fs.writeFileSync(filepath, data.getBuffer());
     return filepath;
   } catch (error) {
-    console.log(error);
+    throw error;
   }
 };
 
