@@ -65,8 +65,6 @@ router.post("/comparison", async (req, res) => {
   }
 
   form.parse(req, async (error, fields, files) => {
-    console.log("fields", fields);
-
     if (error) {
       console.error("Error parsing the files");
       return res.json({ ok: false, msg: "Error parsing the files" });

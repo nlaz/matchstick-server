@@ -12,12 +12,12 @@ const defaults = {
     },
     errorType: "flat",
     transparency: 0.4,
-    largeImageThreshold: 2400,
+    largeImageThreshold: 1200,
     useCrossOrigin: false,
     outputDiff: true,
   },
   scaleToSameSize: true,
-  ignore: "less",
+  ignore: "antialiasing",
 };
 
 const getCompare = async (img1, img2, options = {}) => {
@@ -26,7 +26,7 @@ const getCompare = async (img1, img2, options = {}) => {
     const file1 = PNG.sync.read(fs.readFileSync(img1));
     const file2 = PNG.sync.read(fs.readFileSync(img2));
 
-    const data = await compareImages(file1, file1, options);
+    const data = await compareImages(file1, file2, options);
 
     const filename = Date.now() + "_" + "result";
     const filepath = `images/${filename}.png`;
