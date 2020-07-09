@@ -44,7 +44,7 @@ const checkUploadsFolder = async (uploadFolder) => {
 
 const checkFileType = (file) => {
   const type = file.type.split("/").pop();
-  const validTypes = ["png", "jpeg", "pdf"];
+  const validTypes = ["png"];
   if (!validTypes.includes(type)) {
     return false;
   }
@@ -85,8 +85,6 @@ router.post("/comparison", async (req, res) => {
       });
     }
 
-    console.log("fields", fields);
-
     const { url, options } = fields;
     const opts = formatOptions(options);
     const file = files.upload;
@@ -116,7 +114,8 @@ router.post("/comparison", async (req, res) => {
     // Step 3 - Compare results
     try {
       const errorColor = formatColor(opts.color);
-      result = await compare(img1, img2, { errorColor });
+      const { width, height } = opts;
+      result = await compare(img1, img2, { width, height, errorColor });
     } catch (e) {
       console.error("Error comparing results");
       return res.json({
