@@ -7,12 +7,12 @@ const defaults = {
   output: {
     errorColor: {
       red: 255,
-      green: 240,
-      blue: 11,
+      green: 3,
+      blue: 255,
     },
     errorType: "flat",
-    transparency: 0.4,
-    largeImageThreshold: 1200,
+    transparency: 1,
+    largeImageThreshold: 2400,
     useCrossOrigin: false,
     outputDiff: true,
   },
@@ -22,11 +22,13 @@ const defaults = {
 
 const getCompare = async (img1, img2, options = {}) => {
   try {
-    const opts = { ...defaults, ...options };
+    const errorColor = options.errorColor || defaults.errorColor;
+    const output = { ...defaults.output, errorColor };
+    const opts = { ...defaults, output };
     const file1 = PNG.sync.read(fs.readFileSync(img1));
     const file2 = PNG.sync.read(fs.readFileSync(img2));
 
-    const data = await compareImages(file1, file2, options);
+    const data = await compareImages(file1, file2, opts);
 
     const filename = Date.now() + "_" + "result";
     const filepath = `images/${filename}.png`;

@@ -6,6 +6,7 @@ const fs = bluebird.promisifyAll(require("fs"));
 const config = require("../../config");
 const capture = require("../utils/capture");
 const compare = require("../utils/compare");
+const hexRgb = require("hex-rgb");
 
 const router = express.Router();
 
@@ -13,6 +14,13 @@ const addBaseURL = (filepath) => `${config.serverURL}/${filepath}`;
 
 const formatOptions = (options) => {
   return JSON.parse(options);
+};
+
+const formatColor = (color) => {
+  if (/^#([0-9A-F]{3}){1,2}$/i.test(color)) {
+    const { red, green, blue } = hexRgb(color);
+    return { red, green, blue };
+  }
 };
 
 const checkUploadsFolder = async (uploadFolder) => {
@@ -77,6 +85,10 @@ router.post("/comparison", async (req, res) => {
       });
     }
 
+    console.log("fields", fields);
+
+    const { url, options } = fields;
+    const opts = formatOptions(options);
     const file = files.upload;
     const filename = Date.now() + "_" + parameterize(file.name);
 
@@ -92,8 +104,6 @@ router.post("/comparison", async (req, res) => {
 
     // Step 2 - Capture screenshot from URL
     try {
-      const { url, options } = fields;
-      const opts = formatOptions(options);
       img1 = await capture(url, opts);
     } catch (e) {
       console.error("Error capturing screenshot", e);
@@ -105,10 +115,10 @@ router.post("/comparison", async (req, res) => {
 
     // Step 3 - Compare results
     try {
-      result = await compare(img1, img2);
+      const errorColor = formatColor(opts.color);
+      result = await compare(img1, img2, { errorColor });
     } catch (e) {
       console.error("Error comparing results");
-      console.error(e);
       return res.json({
         ok: false,
         msg: "The results could not be compared.",
