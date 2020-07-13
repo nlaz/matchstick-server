@@ -6,6 +6,7 @@ const fs = bluebird.promisifyAll(require("fs"));
 const config = require("../../config");
 const capture = require("../utils/capture");
 const compare = require("../utils/compare");
+const upload = require("../utils/upload");
 const hexRgb = require("hex-rgb");
 
 const router = express.Router();
@@ -124,10 +125,23 @@ router.post("/comparison", async (req, res) => {
       });
     }
 
+    // Step 4 - Upload images
+    try {
+      img1 = await upload(img1);
+      img2 = await upload(img2);
+      result = await upload(result);
+    } catch (e) {
+      console.error("Error uploading results");
+      return res.json({
+        ok: false,
+        msg: "The results could not be compared.",
+      });
+    }
+
     return res.json({
-      image1: addBaseURL(img1),
-      image2: addBaseURL(img2),
-      result: addBaseURL(result),
+      image1: img1.Location,
+      image2: img2.Location,
+      result: result.Location,
     });
   });
 });

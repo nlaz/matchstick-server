@@ -11,6 +11,7 @@
     "node": "11.x"
   },
   "dependencies": {
+    "aws-sdk": "^2.713.0",
     "axios": ">=0.18.1",
     "bluebird": "^3.7.2",
     "canvas": "^2.6.1",
