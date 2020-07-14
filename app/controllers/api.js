@@ -67,10 +67,8 @@ router.post("/comparison", async (req, res) => {
   const folderExists = await checkUploadsFolder(uploadDir);
 
   if (!folderExists) {
-    return res.json({
-      ok: false,
-      msg: "There was an error creating the uploads folder",
-    });
+    console.error("Uploads folder does not exists.");
+    return res.status(500).send("Could not upload file.");
   }
 
   form.parse(req, async (error, fields, files) => {
@@ -80,10 +78,7 @@ router.post("/comparison", async (req, res) => {
     }
     if (!checkFileType(files.upload)) {
       console.error("The file type is invalid");
-      return res.json({
-        ok: false,
-        msg: "The file received is an invalid type",
-      });
+      return res.status(400).send("Unsupported file type");
     }
 
     const { url, options } = fields;
@@ -98,7 +93,7 @@ router.post("/comparison", async (req, res) => {
     } catch (e) {
       console.log("The file upload failed, trying to remove the temp file...");
       await fs.unlinkAsync(file.path);
-      return res.json({ ok: false, msg: "The file couldn't be uploaded" });
+      return res.status(500).send("Could not upload file.");
     }
 
     // Step 2 - Capture screenshot from URL
@@ -106,10 +101,7 @@ router.post("/comparison", async (req, res) => {
       img1 = await capture(url, opts);
     } catch (e) {
       console.error("Error capturing screenshot", e);
-      return res.json({
-        ok: false,
-        msg: "The website could not be screenshot.",
-      });
+      return res.status(500).send("Could not capture screenshot.");
     }
 
     // Step 3 - Compare results
@@ -119,10 +111,7 @@ router.post("/comparison", async (req, res) => {
       result = await compare(img1, img2, { width, height, errorColor });
     } catch (e) {
       console.error("Error comparing results");
-      return res.json({
-        ok: false,
-        msg: "The results could not be compared.",
-      });
+      return res.status(500).send("Could not compare results.");
     }
 
     // Step 4 - Upload images
@@ -132,10 +121,7 @@ router.post("/comparison", async (req, res) => {
       result = await upload(result);
     } catch (e) {
       console.error("Error uploading results");
-      return res.json({
-        ok: false,
-        msg: "The results could not be compared.",
-      });
+      return res.status(500).send("Could not upload results.");
     }
 
     return res.json({
