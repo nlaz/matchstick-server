@@ -8,7 +8,9 @@ const removeHttp = require("./removeHttp");
 const defaults = {
   overwrite: true,
   scaleFactor: 1,
-  args: ["--no-sandbox"],
+  launchOptions: {
+    args: ["--no-sandbox"],
+  },
 };
 
 const getCapture = async (url, options = {}) => {
